@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="content-box.css">
+  <script src="jquery.min.js" type="text/javascript"></script>
+  <script src="mqttws31.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var wsbroker = "10.246.136.25";  //mqtt websocket enabled broker
+//    var wsbroker = "localhost";  //mqtt websocket enabled broker
+    var wsport = 9001 // port for above
+	var ServerName = "gotsvl1645"
+	var InstanceName = "ISWF_Sample"
+
+	// Create a client instance
+    var client = new Paho.MQTT.Client(wsbroker, wsport, "myclientid_" + parseInt(Math.random() * 100, 10));
+
+  // set callback handlers
+  client.onConnectionLost = onConnectionLost;
+  client.onMessageArrived = onMessageArrived;
+  var options = {
+    timeout: 3,
+    onSuccess: onConnect,
+    onFailure: doFail
+  }
+
+  // connect the client
+  client.connect(options);
+
+  // called when the client connects
+  function onConnect() {
+    // Once a connection has been made, make a subscription and send a message.
+    console.log("onConnect");
+//    client.subscribe("/nagios/"+ServerName+"/"+InstanceName+"/state");
+    client.subscribe("/nagios/"+ServerName+"/#");
+  }
+
+  function doFail(e){
+    console.log(e);
+  }
+
+  // called when the client loses its connection
+  function onConnectionLost(responseObject) {
+    if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost:"+responseObject.errorMessage);
+    }
+  }
+
+  // called when a message arrives
+  function onMessageArrived(message) {
+    console.log("onMessageArrived:"+message.payloadString);
+	document.getElementById("report").className = message.payloadString;	
+	document.getElementById("report").innerHTML = message.payloadString;
+  }	
+    </script>
+
+</head>
+<table style="width:100%">
+  <tr>
+    <th>Service Type</th>
+    <th>Service Name</th>
+    <th>State</th>
+  </tr>
+  <tr>
+    <td>Jenkins Master</td>
+    <td><script>document.write(InstanceName)</script></td> 
+    <td id="report" class="OK">OK</td>
+  </tr>
+  <tr>
+    <td>Jenkins Master</td>
+    <td>ISWF_Other</td> 
+    <td class="UNDEFINED">UNDEFINED</td>
+  </tr>
+</table>
+
+</html>

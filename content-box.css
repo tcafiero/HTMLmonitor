@@ -1,0 +1,31 @@
+/* Content Boxes
+------------------------------------------------------------ */
+ 
+.CRITICAL,
+.WARNING,
+.OK,
+.UNDEFINED {
+    margin: 0 0 25px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.CRITICAL {
+    background-color: #ff0000;
+    border: 1px solid #e9b3b3;
+}
+
+.WARNING {
+    background-color: #ffff00;
+    border: 1px solid #fadf98;
+}
+
+.OK {
+    background-color: #40ff00;
+    border: 1px solid #b2ce96;
+}
+ 
+.UNDEFINED {
+    background-color: #848484;
+    border: 1px solid #b2ce96;
+}

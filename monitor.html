@@ -10,6 +10,15 @@
     var wsport = 9001 // port for above
 	var ServerName = "gotsvl1645"
 	var InstanceName = "ISWF_Sample"
+	var myTO;
+	window.onload = myInit;
+
+	function myInit() {
+    myTO = setTimeout(function(){
+	document.getElementById("report").className = "OK";	
+	document.getElementById("report").innerHTML = "OK";
+	}, 2*60000);
+	}
 
 	// Create a client instance
     var client = new Paho.MQTT.Client(wsbroker, wsport, "myclientid_" + parseInt(Math.random() * 100, 10));
@@ -47,6 +56,7 @@
 
   // called when a message arrives
   function onMessageArrived(message) {
+	clearTimeout(myTO);
     console.log("onMessageArrived:"+message.payloadString);
 	document.getElementById("report").className = message.payloadString;	
 	document.getElementById("report").innerHTML = message.payloadString;
@@ -63,7 +73,7 @@
   <tr>
     <td>Jenkins Master</td>
     <td><script>document.write(InstanceName)</script></td> 
-    <td id="report" class="OK">OK</td>
+    <td id="report" class="UNDEFINED">UNDEFINED</td>
   </tr>
   <tr>
     <td>Jenkins Master</td>
